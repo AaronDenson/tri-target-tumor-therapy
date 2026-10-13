@@ -1,7 +1,5 @@
 """
-T4 Gate Variants: Ablation Study
-===============================
-Systematic comparison of single, dual, and triple-lock configurations.
+Compare single-, dual-, and triple-biomarker gates to see how the number of targeting conditions affects tumor detection and activation in healthy samples.
 """
 
 import numpy as np
@@ -187,7 +185,7 @@ class GateVariantAnalyzer:
         plt.savefig(save_path, dpi=300, bbox_inches='tight')
         plt.close()
 
-        print(f"✅ Ablation plot saved: {save_path}")
+        print(f" Ablation plot saved: {save_path}")
 
 
 def run_complete_ablation_study(tumor_samples, healthy_samples, results_dir="results"):
@@ -214,9 +212,9 @@ def run_complete_ablation_study(tumor_samples, healthy_samples, results_dir="res
         print(f"{name:<12} {s['TI_mean']:.1f}±{s['TI_ci']:.1f}  "
               f"{s['FPR_mean']:.1%}±{s['FPR_ci']:.1%}  {p_val}")
 
-    print(f"\n🎯 TRIPLE-LOCK T4: {stats['triple']['TI_mean']:.0f}x therapeutic index")
-    print("✅ Statistically superior (p<0.001)")
-    print("✅ Publication-ready ablation study complete")
+    print(f"\n TRIPLE-LOCK T4: {stats['triple']['TI_mean']:.0f}x therapeutic index")
+    print(" Statistically superior (p<0.001)")
+    print(" Ablation study complete")
 
     return stats, raw_results
 
