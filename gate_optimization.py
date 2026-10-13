@@ -1,9 +1,10 @@
 """
-T4 Triple-Lock Gate Optimization
+Here, we are comparing different ways of choosing biomarker thresholds and seeing
+how each approach affects tumor detection and activation in healthy samples.
 ================================
 Multi-objective optimization of AND-gate thresholds for maximal therapeutic index.
 
-OPTIMIZATION ALGORITHMS:
+The steps of the Optimization Algorithm are:
 1. Exhaustive Grid Search (ground truth)
 2. Simulated Annealing (global optimum)
 3. Bayesian Optimization (efficient)
@@ -27,7 +28,9 @@ from multiprocessing import Pool
 from functools import partial
 import time
 
-# OPTIMIZATION BOUNDS (literature-derived)
+# Set the range of threshold values the optimizer is allowed to test.
+# These ranges should be checked against the data and cited sources.
+
 # T1 EGFRvIII: 2.5-4.5 (separates EGFRvIII+ from low/-)
 # T2 MMP2: 3.0-5.5 (invasion threshold)
 # T3 miR210: 4.5-9.0 (hypoxia threshold)
@@ -37,7 +40,9 @@ BOUNDS = np.array([
     [4.5, 9.0]  # miR210
 ])
 
-# CLINICAL COST WEIGHTS
+# These weights determine how much false positives, missed tumors,
+# and low thresholds contribute to the model's cost.
+
 COST_WEIGHTS = {
     "fpr_weight": 2.5,  # FPR most critical (safety)
     "tpr_weight": 1.0,  # TPR secondary
@@ -47,7 +52,7 @@ COST_WEIGHTS = {
 
 
 class T4GateOptimizer:
-    """Triple-lock threshold optimization framework."""
+"""Compare threshold-selection methods for the three-biomarker gate."""
 
     def __init__(self, tumor_samples, healthy_samples):
         self.tumor = np.asarray(tumor_samples)
@@ -55,7 +60,7 @@ class T4GateOptimizer:
         self.n_samples = len(tumor_samples)
 
     def and_gate_activation(self, thresholds):
-        """Triple AND gate: ALL biomarkers exceed thresholds."""
+    """This will measure how often all three biomarkers meet their thresholds."""
         thresholds = np.asarray(thresholds)
         tumor_active = np.all(self.tumor >= thresholds, axis=1)
         healthy_active = np.all(self.healthy >= thresholds, axis=1)
@@ -289,7 +294,7 @@ def benchmark_all_methods(tumor_samples, healthy_samples):
 
     # Best method
     best_method = min(methods.keys(), key=lambda k: methods[k]["cost"])
-    print(f"\n🏆 WINNER: {best_method} (Cost={methods[best_method]['cost']:.4f})")
+    print(f"\n The best method is: {best_method} (Cost={methods[best_method]['cost']:.4f})")
 
     return methods, best_method
 
@@ -307,6 +312,6 @@ if __name__ == "__main__":
     best_T = methods[winner]["thresholds"]
     np.save("results/optimal_thresholds.npy", best_T)
 
-    print(f"\n✅ Optimal thresholds saved: {best_T}")
-    print("✅ All methods benchmarked against ground truth")
-    print("✅ Ready for drug release simulation")
+    print(f"\n Optimal thresholds saved: {best_T}")
+    print(" All methods benchmarked against ground truth")
+    print(" Ready for drug release simulation")
