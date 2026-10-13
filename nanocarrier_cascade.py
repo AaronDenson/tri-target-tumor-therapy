@@ -1,8 +1,8 @@
 """
 nanocarrier_cascade.py
 ======================
-High-Resolution Visual Cascade for T4 Triple-Lock Nanocarrier
-ISEF / SEFH / TXSEF Poster Ready
+This is the Visual Cascade for T4 Triple-Lock Nanocarrier
+SEFH Project
 """
 
 import matplotlib.pyplot as plt
@@ -54,7 +54,7 @@ def draw_nanocarrier_cascade(save_path="nanocarrier_cascade.png", figsize=(12,8)
                     xytext=(6, y_start), textcoords='data',
                     arrowprops=dict(arrowstyle="->,head_width=0.5,head_length=0.8", color='black', linewidth=2))
 
-    # Extra graphics: small icons representing each trigger
+    # These are the additional graphics: small icons represent each trigger
     # Stage 1: small "antenna" for aptamer binding
     ax.plot([3.5], [7.5], marker='o', markersize=15, color="#FFD700", label="EGFRvIII Aptamer")
     # Stage 2: scissors icon for MMP-2
