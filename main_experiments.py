@@ -1,9 +1,8 @@
-"""
-T4 Triple-Lock Nanocarrier: ULTIMATE ISEF GOLD PIPELINE v7.0
-============================================================
-Full experimental pipeline: Biomarker simulation, TI optimization,
-single/dual/triple gates, digital twin PK, and visual nanocarrier cascade
-"""
+
+""" T4 Triple-Lock Nanocarrier Pipeline - Main Simulation Code
+Here, we are able to view the full experimental pipeline: Biomarker simulation, TI optimization,
+single/dual/triple gates, digital twin PK, and visual nanocarrier cascade all in one"""
+
 
 import os
 import time
@@ -13,14 +12,12 @@ import warnings
 warnings.filterwarnings("ignore")
 import matplotlib.pyplot as plt
 
-# =====================================================
 # IMPORT AUXILIARY MODULES
-# =====================================================
 try:
     from nanocarrier_cascade import draw_nanocarrier_cascade
 except ImportError:
     def draw_nanocarrier_cascade(save_path="results/nanocarrier_cascade.png"):
-        print(f"⚠️ draw_nanocarrier_cascade() not found. Placeholder saved to {save_path}")
+        print(f" draw_nanocarrier_cascade() not found. Placeholder saved to {save_path}")
         plt.figure(figsize=(6,4))
         plt.text(0.5,0.5,"Nanocarrier Cascade\n(Placeholder)",ha='center',va='center')
         plt.axis("off")
@@ -38,9 +35,7 @@ except ImportError:
     def plot_pk_digital_twin(*args, **kwargs): pass
     def compute_effective_TI(*args, **kwargs): return np.zeros(500), 0, 0, 0
 
-# =====================================================
 # FALLBACK BIOMARKER SIMULATION
-# =====================================================
 try:
     from biomarker_params import sample_biomarkers
 except ImportError:
@@ -50,9 +45,7 @@ except ImportError:
         healthy = np.random.lognormal([0.5,0.6,0.8],[0.4,0.5,0.6],(n_samples,3))
         return tumor, healthy
 
-# =====================================================
-# SIMULATION CORE
-# =====================================================
+# THIS IS THE CORE OF THE ENTIRE T-4 SIMULATION! Dev Note: Changes that are modified here impact the results immensely
 try:
     from simulation_core import T4SimulationCore
 except ImportError:
@@ -93,9 +86,7 @@ except ImportError:
             variants["Triple-T4"] = self.compute_full_metrics(base_thr)
             return variants
 
-# =====================================================
 # CLASSICAL OPTIMIZER
-# =====================================================
 try:
     from optimization_classical import ClassicalOptimizer
 except ImportError:
@@ -111,45 +102,35 @@ except ImportError:
             ti = tpr/max(fpr,1e-6)
             return [{"thresholds": thresholds, "cost":1.0,"tpr":tpr,"fpr":fpr,"ti":ti,"method":"GridSearch"}]
 
-# =====================================================
 # RESULTS DIRECTORY
-# =====================================================
 RESULTS_DIR = Path("results")
 RESULTS_DIR.mkdir(exist_ok=True)
 
-# =====================================================
 # UTILITY
-# =====================================================
 def print_biomarker_info(fold_changes, thresholds):
-    print("\n📊 Biomarker Fold Changes & Thresholds")
+    print("\n Biomarker Fold Changes & Thresholds")
     print("-"*50)
     names = ["EGFRvIII","MMP-2","miR-210"]
     print(f"{'Biomarker':<12} | {'Fold ↑':>6} | {'Threshold':>9}")
     for i,name in enumerate(names):
         print(f"{name:<12} | {fold_changes[i]:>6.2f}x | {thresholds[i]:>9.2f}")
 
-# =====================================================
 # MAIN EXPERIMENTS
-# =====================================================
 def main(seed=20260204):
     np.random.seed(seed)
     start_time = time.time()
-    print("🏆 T4 TRIPLE-LOCK GBM NANOCARRIER - ISEF GOLD PIPELINE v7.0")
+    print(" T4 TRIPLE-LOCK GBM NANOCARRIER - ISEF GOLD PIPELINE v7.0")
     print("="*90)
 
-    # -----------------------------
     # 1. Biomarker simulation
-    # -----------------------------
-    print("\n🧬 1/8 Biomarker Simulation")
+    print("\n 1/8 Biomarker Simulation")
     tumor, healthy = sample_biomarkers(n_samples=25000, seed=seed)
     core = T4SimulationCore(tumor, healthy)
     fold_changes = np.mean(tumor,axis=0)/np.mean(healthy,axis=0)
     print(f"✅ 25K tumor + 25K healthy | Fold ↑: EGFRvIII={fold_changes[0]:.1f}x, MMP-2={fold_changes[1]:.1f}x, miR-210={fold_changes[2]:.1f}x")
 
-    # -----------------------------
     # 1b. Ablation study
-    # -----------------------------
-    print("\n🔒 1b/8 Single/Dual/Triple Gate Ablation Study")
+    print("\n 1b/8 Single/Dual/Triple Gate Ablation Study")
     ablation_results = core.ablation_study()
     variants = list(ablation_results.keys())
     for variant, metrics in ablation_results.items():
@@ -164,10 +145,8 @@ def main(seed=20260204):
     plt.tight_layout()
     plt.savefig(RESULTS_DIR/"ablation_study_TI.png")
 
-    # -----------------------------
     # 2. Classical optimization
-    # -----------------------------
-    print("\n🔬 2/8 Classical Optimization Suite")
+    print("\n 2/8 Classical Optimization Suite")
     optimizer = ClassicalOptimizer(tumor, healthy)
     classical_results_raw = optimizer.optimize_all()
     best_result = classical_results_raw[0]
@@ -178,7 +157,7 @@ def main(seed=20260204):
     # -----------------------------
     # 3. Quantum optimization (simulated)
     # -----------------------------
-    print("\n⚛️ 3/8 Quantum QAOA (Simulated)")
+    print("\n 3/8 Quantum QAOA (Simulated)")
     qaoa_result = {
         "thresholds": best_classical_T*1.02,
         "cost": best_result["cost"]*0.95,
@@ -187,30 +166,22 @@ def main(seed=20260204):
         "TI": best_classical_TI*1.1
     }
 
-    # -----------------------------
     # 4. Noise robustness
-    # -----------------------------
     noise_results = core.noise_robustness(best_classical_T)
-    print(f"✅ Noise robustness simulated ({len(noise_results['TI_noise'])} runs)")
+    print(f" Noise robustness simulated ({len(noise_results['TI_noise'])} runs)")
 
-    # -----------------------------
     # 5. Digital twin PK simulation
-    # -----------------------------
-    print("\n💊 5/8 Digital Twin PK Simulation")
+    print("\n 5/8 Digital Twin PK Simulation")
     time_vector, blood_mc, bbb_mc, tumor_mc = simulate_pk_digital_twin(n_sim=500)
     plot_pk_digital_twin(time_vector, blood_mc, bbb_mc, tumor_mc, save_path=RESULTS_DIR/"pk_digital_twin.png")
     eff_TI, mean_TI, low_TI, high_TI = compute_effective_TI(tumor_mc, base_TI=best_classical_TI)
-    print(f"💊 Effective TI at tumor (mean ± 95% CI): {mean_TI:,.0f}x [{low_TI:,.0f}x - {high_TI:,.0f}x]")
+    print(f" Effective TI at tumor (mean ± 95% CI): {mean_TI:,.0f}x [{low_TI:,.0f}x - {high_TI:,.0f}x]")
 
-    # -----------------------------
     # 6. Visual nanocarrier cascade
-    # -----------------------------
-    print("\n🎨 Generating visual nanocarrier cascade for poster...")
+    print("\n Generating visual nanocarrier cascade for poster...")
     draw_nanocarrier_cascade(save_path=RESULTS_DIR/"nanocarrier_cascade_pretty.png")
 
-    # -----------------------------
     # 7. Save executive summary
-    # -----------------------------
     summary_data = {
         "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
         "fold_changes": fold_changes.tolist(),
@@ -221,11 +192,9 @@ def main(seed=20260204):
         "effective_TI_IV_BBB_Tumor": mean_TI
     }
     np.savez(RESULTS_DIR/"T4_executive_summary.npz", **summary_data)
-    print(f"💾 Executive summary saved: {RESULTS_DIR/'T4_executive_summary.npz'}")
+    print(f" Executive summary saved: {RESULTS_DIR/'T4_executive_summary.npz'}")
 
-    # -----------------------------
     # 8. Summary and runtime
-    # -----------------------------
     total_time = time.time()-start_time
     print(f"\n⏱️ Total runtime: {total_time/60:.1f} min")
     print("🏆 T4 Triple-Lock is ready! All systems go!")
