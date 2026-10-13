@@ -1,19 +1,22 @@
 """
-T4 Triple-Lock Drug Release Model
+This is the T4 Triple-Lock Drug Release Model
 =================================
-Mathematical modeling of AND-gate controlled temozolomide (TMZ) release from PLGA nanoparticles.
+This code simulates the temozolomide (TMZ) release from PLGA nanoparticles using a
+three-biomarker AND gate designed to favor drug release in tumor tissue.
 
-KEY FEATURES:
-1. Hyperbolic Tangent release kinetics (best-fit model for PLGA NPs)[1]
-2. Triple-lock activation: ALL 3 biomarkers > thresholds
-3. Dose-response: TMZ IC50 = 200 μM for GBM cells[2]
-4. Clearance: t1/2 = 1.8h (intratumoral)[3]
-5. Burst + sustained release phases
+The model includes:
+1. Hyperbolic tangent release kinetics to describe drug release from
+   PLGA nanoparticles [1].
+2. A triple-lock mechanism that activates only when all three biomarkers
+   reach their specified thresholds.
+3. A Hill dose-response model using a TMZ IC50 of 200 μM for GBM cells [2].
+4. First-order drug clearance based on an intratumoral half-life of 1.8 h [3].
+5. An initial burst of drug release followed by a slower, sustained phase.
 
 References:
-[1] Hyperbolic tangent model superior for PLGA NPs (PLoS One 2022)
-[2] TMZ IC50 U87MG: 200μM (Clin Cancer Res 2005)
-[3] TMZ intratumoral t1/2: 1.8h (J Neurooncol 2010)
+[1] Hyperbolic tangent release model for PLGA nanoparticles (PLoS One, 2022)
+[2] TMZ IC50 in U87MG cells (Clinical Cancer Research, 2005)
+[3] Intratumoral TMZ half-life (Journal of Neuro-Oncology, 2010)
 """
 
 import numpy as np
@@ -21,7 +24,7 @@ from scipy.integrate import odeint
 from numpy import tanh
 import matplotlib.pyplot as plt
 
-# LITERATURE-CALIBRATED PHARMACOKINETICS
+# PHARMACOKINETICS based on literature review findings
 TMZ_PARAMS = {
     "dose_per_particle": 1.2e-15,  # mol TMZ/PLGA NP (50nm, 10% loading)[4]
     "IC50_uM": 200.0,  # TMZ IC50 U87MG GBM cells[2]
@@ -242,9 +245,9 @@ if __name__ == "__main__":
         tumor, healthy, "results/t4_release_dynamics.png"
     )
 
-    print("✅ TMZ PK: Hyperbolic Tangent model (PLoS One 2022)")
-    print("✅ Therapeutic Index >10x across 48h")
-    print("✅ Publication-ready figures generated")
+    print("Checked TMZ PK: Hyperbolic Tangent model (PLoS One 2022)")
+    print("Checked Therapeutic Index >10x across 48h")
+    print("The figures have been generated")
 
     # Gate comparison
     compare_gate_configs(tumor, healthy, "results/gate_comparison.png")
