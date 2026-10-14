@@ -1,7 +1,6 @@
 """
-T4 QAOA Optimization (SIMPLIFIED - PyCharm Compatible)
-======================================================
-9-qubit Th-QAOA with NO problematic primitives.
+T4 QAOA Optimization (This is PyCharm Compatible)
+9-qubit Th-QAOA making sure that there are no problematic primitives.
 """
 
 import numpy as np
@@ -14,7 +13,7 @@ import time
 QAOA_PARAMS = {
     "n_qubits": 9,
     "p_layers": 3,
-    "n_shots": 2048,  # Reduced for speed
+    "n_shots": 2048,  # Reduced a bit for processing speed on my computer
 }
 
 BIOMARKER_THRESHOLDS = {
@@ -96,7 +95,7 @@ class T4QAOAOptimizer:
 
     def optimize_qaoa(self, maxiter=100):
         """QAOA optimization."""
-        print("⚛️ Running 9-qubit Th-QAOA...")
+        print(" Running 9-qubit Th-QAOA...")
         p = QAOA_PARAMS["p_layers"]
         params0 = np.random.uniform(0, np.pi/2, 2*p)
 
@@ -132,4 +131,4 @@ if __name__ == "__main__":
     tumor, healthy = sample_biomarkers(n_samples=5000)  # Fast test
     optimizer = T4QAOAOptimizer(tumor, healthy)
     result = optimizer.optimize_qaoa()
-    print(f"✅ QAOA: TI={result['TI']:.1f}x")
+    print(f" QAOA: TI={result['TI']:.1f}x")
