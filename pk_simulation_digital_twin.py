@@ -1,14 +1,13 @@
 """
 pk_simulation_digital_twin.py
-=============================
 
-LITERATURE‑BASED stochastic digital twin simulation of T4 nanocarrier
+stochastic digital twin simulation of T4 nanocarrier (closest to literature review values that I was able to research on)
 transport dynamics: IV → Blood → Blood‑Brain Barrier (BBB) → Tumor.
 Includes probabilistic transfer, Monte Carlo variability, and
 rate constants derived from experimentally observed BBB nanoparticle
 transcytosis kinetics.
 
-Literature‑anchored kinetic parameters:
+Literature‑anchored kinetic parameters, concepts from Honors Biology:
     • Endocytosis (blood → BBB endothelial): t1/2 ≈ 1.9 hr
     • Exocytosis (BBB endothelial → brain): t1/2 ≈ 14 hr
 Reference: experimentally fitted in vitro BBB nanoparticle model. :contentReference[oaicite:4]{index=4}
@@ -122,7 +121,7 @@ def plot_pk_digital_twin(time, blood_mc, bbb_mc, tumor_mc, save_path=None):
 
     if save_path:
         plt.savefig(save_path)
-        print(f"💾 Digital twin PK plot saved: {save_path}")
+        print(f" Digital twin PK plot saved: {save_path}")
     plt.close()
 
 
@@ -143,4 +142,4 @@ if __name__ == "__main__":
     t, blood_mc, bbb_mc, tumor_mc = simulate_pk_digital_twin(n_sim=500)
     plot_pk_digital_twin(t, blood_mc, bbb_mc, tumor_mc, save_path="results/pk_digital_twin_lit.png")
     eff_TI, m, lo, hi = compute_effective_TI(tumor_mc, base_TI=1000)
-    print(f"\n💊 Effective TI (mean ± 95% CI): {m:.0f}x [{lo:.0f}x – {hi:.0f}x]")
+    print(f"\n Effective TI (mean ± 95% CI): {m:.0f}x [{lo:.0f}x – {hi:.0f}x]")
