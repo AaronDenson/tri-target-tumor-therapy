@@ -1,20 +1,23 @@
 """
 T4 Triple-Lock Biomarker Model
 ==============================
-Literature-calibrated multivariate Gaussian distributions for GBM vs healthy brain tissue.
+This portion of the code simulates biomarker profiles for glioblastoma (GBM) and healthy
+brain tissue using literature-informed statistical distributions.
 
-Biomarkers:
-1. EGFRvIII: GBM-specific variant (30-50% primary GBMs)[1,2]
-2. MMP2: Invasion marker (3-5x elevated in GBM ECM)[3,4]
-3. miR210: Hypoxia marker (4-10x upregulated in hypoxic GBM cores)[5,6]
+The model focuses on three biomarkers in particular that are very common in Glioblastoma, thus enabling us to better identify it:
+1. EGFRvIII: A tumor-associated variant found in a subset of primary GBMs [1,2].
+2. MMP2: An enzyme associated with extracellular matrix remodeling and
+   tumor invasion, with elevated levels reported in GBM [3,4].
+3. miR210: A microRNA associated with cellular hypoxia and often elevated
+   in hypoxic regions of GBM [5,6].
 
 References:
-[1] EGFRvIII in 24-67% primary GBM (Nature Rev Cancer 2010)
-[2] EGFR amp + EGFRvIII: mean 5-15x healthy (Clin Cancer Res 2006)
-[3] MMP2: 3.2x tumor/healthy ratio (J Neurooncol 2005)
-[4] MMP2 SD reflects tumor heterogeneity (Cancer Res 2008)
-[5] miR210: 8.7x hypoxic vs normoxic GBM (Neuro Oncol 2011)
-[6] Healthy brain miR210 basal expression (RNA Biol 2012)
+[1] EGFRvIII prevalence in primary GBM (Nature Reviews Cancer, 2010)
+[2] EGFR amplification and EGFRvIII expression (Clinical Cancer Research, 2006)
+[3] MMP2 tumor-to-healthy tissue ratio (Journal of Neuro-Oncology, 2005)
+[4] MMP2 variability and tumor heterogeneity (Cancer Research, 2008)
+[5] miR210 expression under hypoxic conditions (Neuro-Oncology, 2011)
+[6] Basal miR210 expression in healthy brain tissue (RNA Biology, 2012)
 """
 
 import numpy as np
@@ -22,7 +25,7 @@ import matplotlib.pyplot as plt  # ADD THIS LINE
 
 BIOMARKERS = ["EGFRvIII", "MMP2", "miR210"]
 
-# LITERATURE-CALIBRATED PARAMETERS (normalized units)
+# Parameters (normalized units) found through literature review
 # Tumor:healthy mean ratios match reported fold-changes
 # SDs reflect intra-tumor heterogeneity from scRNA-seq studies
 LITERATURE_PARAMS = {
