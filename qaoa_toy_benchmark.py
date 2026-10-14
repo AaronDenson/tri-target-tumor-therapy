@@ -1,9 +1,6 @@
 """
-QAOA Toy Benchmark Suite (CORRECTED, NO PRIMITIVES)
-==================================================
-Pre-T4 validation using pure AerSimulator.
-
-VALIDATES:
+QAOA Toy Benchmark Suite 
+This section of the code validates the:
 - Proper QAOA parameterization
 - Depth scaling (p = 1,2,3)
 - Approximation ratios on canonical toy problems
@@ -16,9 +13,7 @@ from qiskit_aer import AerSimulator
 import matplotlib.pyplot as plt
 import os
 
-# -------------------------------------------------
-# TOY PROBLEM DEFINITIONS (Literature standard)
-# -------------------------------------------------
+# Toy Problem definitions as seen below:
 TOY_PROBLEMS = {
     "maxcut_triangle": {
         "graph": np.array([[0, 1, 1],
@@ -44,9 +39,6 @@ TOY_PROBLEMS = {
 }
 
 
-# -------------------------------------------------
-# QAOA VALIDATOR
-# -------------------------------------------------
 class QAOAValidator:
     """QAOA toy benchmark validator (Aer-only)."""
 
@@ -54,7 +46,7 @@ class QAOAValidator:
         self.backend = AerSimulator()
         self.shots = shots
 
-    # ------------------ COST FUNCTIONS ------------------
+    # Cost Functions below:
 
     def maxcut_cost(self, bitstring, adjacency):
         bits = np.array([int(b) for b in bitstring[::-1]])
@@ -82,7 +74,7 @@ class QAOAValidator:
         right = np.sum(numbers[bits == 0])
         return abs(left - right)
 
-    # ------------------ QAOA CORE ------------------
+    # The main portion of the QAOA:
 
     def run_qaoa_toy(self, problem_name: str, p_layers=(1, 2, 3)):
         problem = TOY_PROBLEMS[problem_name]
@@ -128,7 +120,6 @@ class QAOAValidator:
 
             qc.measure_all()
 
-            # Parameter sweep (coarse grid – toy validation)
             best_cost = -np.inf
             best_params = None
 
@@ -171,14 +162,13 @@ class QAOAValidator:
                 "params": best_params
             }
 
-            status = "✅ PASS" if approx_ratio >= 0.75 else "⚠️ WARN"
+            status = " PASS" if approx_ratio >= 0.75 else " WARN"
             print(f"  p={p}: ratio={approx_ratio:.3f} {status}")
 
         return results
 
-    # ------------------ FULL VALIDATION ------------------
     def validate_all_toys(self):
-        print("🚀 QAOA TOY BENCHMARK SUITE")
+        print(" QAOA TOY BENCHMARK SUITE")
         print("=" * 60)
 
         all_results = {}
@@ -191,13 +181,13 @@ class QAOAValidator:
                 passed += 1
 
         print("\nSUMMARY:")
-        print(f"🎯 {passed}/{len(TOY_PROBLEMS)} problems passed")
+        print(f" {passed}/{len(TOY_PROBLEMS)} problems passed")
 
         if passed == len(TOY_PROBLEMS):
-            print("✅ QAOA VALIDATED → READY FOR T4")
+            print(" QAOA VALIDATED → READY FOR T4")
             self.plot_validation_curves(all_results)
         else:
-            print("⚠️ Partial pass → acceptable for toy benchmark")
+            print(" Partial pass → acceptable for toy benchmark")
 
         return True
 
@@ -218,12 +208,9 @@ class QAOAValidator:
         plt.tight_layout()
         plt.savefig(save_path, dpi=300)
         plt.close()
-        print(f"📈 Saved: {save_path}")
+        print(f" Saved: {save_path}")
 
-# -------------------------------------------------
-# MAIN
-# -------------------------------------------------
 if __name__ == "__main__":
     validator = QAOAValidator(shots=1024)
     validator.validate_all_toys()
-    print("\n🏆 QAOA IMPLEMENTATION VERIFIED")
+    print("\n QAOA IMPLEMENTATION VERIFIED")
