@@ -1,4 +1,4 @@
-# tri-target-tumor-therapy
+# TRI-TARGET-TUMOR THERAPY (T4)
 
 Glioblastoma multiforme is the deadliest human cancer and amongst the most belligerent malignancies known to mankind, with a nearly guaranteed fatality exhibiting a survival rate of 5-7% (Ostrom et al., 2015). 
 
