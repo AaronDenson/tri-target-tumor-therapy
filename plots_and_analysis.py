@@ -1,7 +1,6 @@
 """
 T4 Complete Visualization Suite
-===============================
-7 publication-ready figures for ISEF poster/manuscript.
+Through matplotlib, we are able to extract data models and images for visual accuracy for our model!
 
 FIGURES:
 1. Biomarker Distributions (3-panel density)
@@ -23,7 +22,7 @@ from matplotlib.gridspec import GridSpec
 from scipy import stats
 import json
 
-# PUBLICATION STYLE (Nature/Science compliant)
+
 plt.style.use('default')
 sns.set_palette("colorblind")
 
@@ -82,7 +81,7 @@ class T4Visualizer:
         plt.savefig(save_path, bbox_inches='tight')
         plt.close()
 
-        print(f"✅ Figure 1 saved: {save_path}")
+        print(f"Figure 1 saved: {save_path}")
         return save_path
 
     def roc_like_curves(self, optimization_results, tumor_samples, healthy_samples, save_path=None):
@@ -113,7 +112,7 @@ class T4Visualizer:
             ax.plot(fprs, tprs, 'o-', color=colors[i], linewidth=2.5,
                     markersize=4, label=f'{method} (AUC={auc:.3f})')
 
-        # Random baseline
+        # This is a random baseline...it's random :/
         rng = np.random.RandomState(42)
         random_fpr, random_tpr = [], []
         for _ in range(1000):
@@ -134,7 +133,7 @@ class T4Visualizer:
         plt.savefig(save_path, bbox_inches='tight')
         plt.close()
 
-        print(f"✅ Figure 2 saved: {save_path}")
+        print(f" Figure 2 saved: {save_path}")
         return save_path
 
     def gate_ablation_study(self, ablation_stats, save_path=None):
@@ -194,7 +193,7 @@ class T4Visualizer:
         plt.savefig(save_path, bbox_inches='tight')
         plt.close()
 
-        print(f"✅ Figure 3 saved: {save_path}")
+        print(f" Figure 3 saved: {save_path}")
         return save_path
 
     def optimization_convergence(self, optimization_results, save_path=None):
@@ -215,7 +214,6 @@ class T4Visualizer:
         ax1.set_title('Optimization Efficiency')
         ax1.grid(True, alpha=0.3)
 
-        # Pareto front
         colors = plt.cm.viridis(np.linspace(0, 1, len(methods)))
         for i, method in enumerate(methods):
             ax2.scatter(evals[i], costs[i], s=200, c=colors[i],
@@ -231,7 +229,7 @@ class T4Visualizer:
         plt.savefig(save_path, bbox_inches='tight')
         plt.close()
 
-        print(f"✅ Figure 4 saved: {save_path}")
+        print(f" Figure 4 saved: {save_path}")
         return save_path
 
     def drug_release_dynamics(self, release_results, thresholds, save_path=None):
@@ -298,7 +296,7 @@ class T4Visualizer:
         plt.savefig(save_path, bbox_inches='tight')
         plt.close()
 
-        print(f"✅ Figure 5 saved: {save_path}")
+        print(f" Figure 5 saved: {save_path}")
         return save_path
 
     def quantum_classical_comparison(self, classical_results, qaoa_result, save_path=None):
@@ -341,7 +339,7 @@ class T4Visualizer:
         plt.savefig(save_path, bbox_inches='tight')
         plt.close()
 
-        print(f"✅ Figure 6 saved: {save_path}")
+        print(f" Figure 6 saved: {save_path}")
         return save_path
 
     def generate_poster_summary(self, all_results, save_path=None):
@@ -382,7 +380,7 @@ class T4Visualizer:
         plt.savefig(save_path, bbox_inches='tight')
         plt.close()
 
-        print(f"✅ Figure 7 (POSTER SUMMARY) saved: {save_path}")
+        print(f" Figure 7 (POSTER SUMMARY) saved: {save_path}")
         return save_path
 
 
@@ -393,7 +391,7 @@ def generate_complete_suite(tumor_samples, healthy_samples,
     """Generate ALL 7 publication figures."""
     visualizer = T4Visualizer(results_dir)
 
-    print("🎨 GENERATING PUBLICATION SUITE...")
+    print(" GENERATING PUBLICATION SUITE...")
     print("=" * 60)
 
     # Figure 1: Biomarkers
@@ -420,21 +418,20 @@ def generate_complete_suite(tumor_samples, healthy_samples,
     all_results = {**optimization_results, **classical_results}
     visualizer.generate_poster_summary(all_results)
 
-    print("\n🎉 COMPLETE PUBLICATION SUITE GENERATED!")
-    print(f"📁 All figures saved to: {results_dir}/")
-    print("✅ 7 Nature-quality figures (300 DPI)")
-    print("✅ Ready for ISEF poster/manuscript")
+    print("\n COMPLETE SUITE GENERATED!")
+    print(f" All figures saved to: {results_dir}/")
+    print(" 7 figures (300 DPI)")
 
     return [f"{results_dir}/0{i}_*.png" for i in range(1, 8)]
 
 
 if __name__ == "__main__":
-    # Demo with synthetic data (replace with real results)
+    # Demo with synthetic data (this will replace with real results)
     np.random.seed(20251223)
     tumor = np.random.normal(4, 1.5, (25000, 3))
     healthy = np.random.normal(1, 0.7, (25000, 3))
 
-    # Mock results (replace with actual optimization outputs)
+    # Mock results (meanwhile this will replace with actual optimization outputs)
     mock_opt = {
         "Grid": {"thresholds": [3.2, 3.8, 5.1], "cost": 0.085, "TI": 25.3, "TPR": 0.82, "FPR": 0.032, "n_evals": 15625},
         "QAOA": {"thresholds": [3.1, 3.9, 5.0], "cost": 0.078, "TI": 28.1, "TPR": 0.84, "FPR": 0.030, "n_evals": 8192}
