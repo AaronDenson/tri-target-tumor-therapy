@@ -1,40 +1,36 @@
 """
-T4 Project COMPLETE INTEGRATION TEST
-====================================
-Run this FIRST. If ANY test fails → fix before main experiments.
+T4 Project COMPLETE integration test
+
+Run this FIRST. If ANY test fails then fix before main experiments!!!!
 """
 
 import sys
 import os
 import numpy as np
 import matplotlib
-matplotlib.use('Agg')  # Non-interactive backend
+matplotlib.use('Agg')  
 import warnings
 warnings.filterwarnings("ignore")
 
-# -------------------------------
-# TEST COUNTERS
-# -------------------------------
+
 TEST_PASSED = 0
 TEST_TOTAL = 10
 
 def print_status(test_name, passed, details=""):
     """Print test result."""
     global TEST_PASSED
-    status = "✅ PASS" if passed else "❌ FAIL"
+    status = " PASS" if passed else " FAIL"
     TEST_PASSED += int(passed)
     print(f"[{TEST_PASSED:2d}/{TEST_TOTAL}] {status:6s} {test_name}")
     if details:
         print(f"    {details}")
     return passed
 
-print("🚀 T4 PROJECT INTEGRATION TEST")
+print(" T4 PROJECT INTEGRATION TEST")
 print("=" * 60)
 
-# -------------------------------
-# TEST 1: CORE IMPORTS
-# -------------------------------
-print("\n🔍 TEST 1: CORE IMPORTS")
+
+print("\n TEST 1: CORE IMPORTS")
 try:
     from biomarker_params import sample_biomarkers
     from simulation_core import T4SimulationCore, generate_validation_samples
@@ -50,10 +46,7 @@ except ImportError as e:
     print_status("Imports", False, f"Missing: {e}")
     sys.exit(1)
 
-# -------------------------------
-# TEST 2: BIOMARKER GENERATION
-# -------------------------------
-print("\n🧬 TEST 2: BIOMARKER GENERATION")
+print("\n TEST 2: BIOMARKER GENERATION")
 try:
     tumor, healthy = sample_biomarkers(n_samples=2500)  # smaller for speed
     assert tumor.shape == (2500, 3)
@@ -63,10 +56,7 @@ try:
 except Exception as e:
     print_status("Biomarkers", False, str(e))
 
-# -------------------------------
-# TEST 3: SIMULATION CORE
-# -------------------------------
-print("\n⚙️ TEST 3: SIMULATION CORE")
+print("\n TEST 3: SIMULATION CORE")
 try:
     core = T4SimulationCore(tumor, healthy)
     test_T = np.array([3.0, 3.5, 5.0])
@@ -76,10 +66,8 @@ try:
 except Exception as e:
     print_status("Core", False, str(e))
 
-# -------------------------------
-# TEST 4: CLASSICAL OPTIMIZATION
-# -------------------------------
-print("\n🔬 TEST 4: CLASSICAL OPTIMIZATION")
+
+print("\n TEST 4: CLASSICAL OPTIMIZATION")
 try:
     optimizer = ClassicalOptimizer(tumor, healthy)
     cost = optimizer.clinical_cost(test_T)
@@ -88,10 +76,8 @@ try:
 except Exception as e:
     print_status("Classical", False, str(e))
 
-# -------------------------------
-# TEST 5: QAOA TOY VALIDATION
-# -------------------------------
-print("\n⚛️ TEST 5: QAOA TOY BENCHMARK")
+
+print("\n TEST 5: QAOA TOY BENCHMARK")
 try:
     # Light check: import + instantiation
     validator = QAOAValidator(shots=256)
@@ -99,10 +85,8 @@ try:
 except Exception as e:
     print_status("QAOA toys", False, str(e))
 
-# -------------------------------
-# TEST 6: GATE VARIANTS
-# -------------------------------
-print("\n🔒 TEST 6: GATE VARIANTS")
+
+print("\n TEST 6: GATE VARIANTS")
 try:
     analyzer = GateVariantAnalyzer(tumor, healthy)
     tpr, fpr = analyzer.gate_activation(np.array([3.0, 3.5, 5.0]), [0, 1, 2])
@@ -111,10 +95,8 @@ try:
 except Exception as e:
     print_status("Ablation", False, str(e))
 
-# -------------------------------
-# TEST 7: DRUG RELEASE
-# -------------------------------
-print("\n💊 TEST 7: DRUG RELEASE KINETICS")
+
+print("\n TEST 7: DRUG RELEASE KINETICS")
 try:
     optimal_T = np.array([3.0, 3.5, 5.0])
     release = T4DrugRelease(optimal_T, n_particles=int(1e6))  # smaller for test
@@ -124,10 +106,7 @@ try:
 except Exception as e:
     print_status("Drug release", False, str(e))
 
-# -------------------------------
-# TEST 8: PUBLICATION FIGURES
-# -------------------------------
-print("\n📊 TEST 8: PUBLICATION FIGURES")
+print("\n TEST 8: PUBLICATION FIGURES")
 try:
     os.makedirs("results", exist_ok=True)
     visualizer = T4Visualizer("results")
@@ -137,10 +116,8 @@ try:
 except Exception as e:
     print_status("Figures", False, str(e))
 
-# -------------------------------
-# TEST 9: PHASE I READINESS
-# -------------------------------
-print("\n🏥 TEST 9: PHASE I CLINICAL READINESS")
+
+print("\n TEST 9: PHASE I CLINICAL READINESS")
 try:
     test_T = np.array([3.0, 3.5, 5.0])
     readiness = core.validate_thresholds(test_T)
@@ -148,10 +125,7 @@ try:
 except Exception as e:
     print_status("Phase I", False, str(e))
 
-# -------------------------------
-# TEST 10: RESULTS PERSISTENCE
-# -------------------------------
-print("\n💾 TEST 10: RESULTS PERSISTENCE")
+print("\n TEST 10: RESULTS PERSISTENCE")
 try:
     test_T = np.array([3.0, 3.5, 5.0])
     np.save("results/test_thresholds.npy", test_T)
@@ -161,29 +135,27 @@ try:
 except Exception as e:
     print_status("Persistence", False, str(e))
 
-# -------------------------------
-# FINAL SUMMARY
-# -------------------------------
+
 print("\n" + "=" * 60)
-print("🎯 FINAL INTEGRATION TEST SUMMARY")
+print(" FINAL INTEGRATION TEST SUMMARY")
 print("=" * 60)
-print(f"📊 {TEST_PASSED}/{TEST_TOTAL} TESTS PASSED")
+print(f" {TEST_PASSED}/{TEST_TOTAL} TESTS PASSED")
 
 if TEST_PASSED == TEST_TOTAL:
-    print("\n🏆 🎉 T4 PROJECT: ISEF GOLD READY! 🎉 🏆")
-    print("\n🚀 RUN MAIN EXPERIMENT:")
+    print("\nT4 PROJECT is officially READY!")
+    print("\n RUN MAIN EXPERIMENT:")
     print("   python main_experiments.py")
 elif TEST_PASSED >= 8:
-    print("\n✅ T4 PROJECT: READY FOR MAIN EXPERIMENT!")
-    print("\n🚀 RUN MAIN EXPERIMENT:")
+    print("\n T4 PROJECT: READY FOR MAIN EXPERIMENT!")
+    print("\n RUN MAIN EXPERIMENT:")
     print("   python main_experiments.py")
 else:
-    print("\n⚠️ Some tests failed - check errors above")
+    print("\n Some tests failed - check errors above")
 
-print("\n📁 COPY TO POSTER:")
+print("\n COPY TO POSTER:")
 print("   results/01_biomarker_distributions.png")
 print("   results/03_gate_ablation.png")
 print("   results/05_drug_release.png")
 
-print("\n✅ INTEGRATION TEST COMPLETE")
-print("✅ Ready for full-scale experiments!")
+print("\n INTEGRATION TEST COMPLETE")
+print(" Ready for full-scale experiments!")
