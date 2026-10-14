@@ -1,8 +1,7 @@
 """
-T4 Triple-Lock Simulation Core
-==============================
-Literature-calibrated core functions for ALL T4 analyses.
+T4 Triple-Lock Core of the Simulation
 
+This file contains the main functions used throughout the T4 triple-lock simulation. It brings together the pieces needed to test how well the three-biomarker system distinguishes tumor tissue from healthy tissue, how reliably the gate activates, and how sensitive its performance is to changes in the input data.
 CORE FUNCTIONS:
 1. triple_and_gate() - Vectorized AND-gate activation
 2. clinical_cost() - Phase I optimized J(T) = 2.5×FPR + (1-TPR)
@@ -237,7 +236,7 @@ class T4SimulationCore:
 
         print("PHASE I READINESS:")
         for check, passed in checks.items():
-            status = "✅" if passed else "❌"
+            status = "Passed!" if passed else "Failed"
             print(f"  {check}: {status}")
 
         return {"phase_I_ready": all(checks.values()), **metrics}
@@ -284,5 +283,5 @@ def quick_test():
 
 if __name__ == "__main__":
     core = quick_test()
-    print("\n✅ T4 SIMULATION CORE: VALIDATED")
-    print("✅ Ready for optimization + drug release")
+    print("\n T4 SIMULATION CORE: COMPLETED")
+    print("Ready for optimization + drug release")
